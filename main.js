@@ -27,7 +27,7 @@ function readTasks(content, countSubtasks) {
 class ChecklistModal extends Modal {
   constructor(app, submit){super(app);this.submit=submit;}
   onOpen(){
-    const el=this.contentEl;el.addClass("matebar-modal");el.createEl("h2",{text:"ساخت چک‌لیست مرحله‌ای"});
+    const el=this.contentEl;el.addClass("puyan-modal");el.createEl("h2",{text:"ساخت چک‌لیست مرحله‌ای"});
     let title="",total="100",step="10";
     new Setting(el).setName("عنوان فعالیت").addText(t=>t.setPlaceholder("مثلاً مطالعه کتاب").onChange(v=>title=v));
     new Setting(el).setName("مقدار کل").setDesc("تعداد صفحات، فصل‌ها یا مراحل").addText(t=>t.setValue(total).onChange(v=>total=v));
@@ -40,10 +40,10 @@ class ChecklistModal extends Modal {
   }
   onClose(){this.contentEl.empty();}
 }
-class MatebarSettings extends PluginSettingTab {
+class PuyanSettings extends PluginSettingTab {
   constructor(app,plugin){super(app,plugin);this.plugin=plugin;}
   display(){
-    const el=this.containerEl,p=this.plugin;el.empty();el.createEl("h2",{text:"تنظیمات Matebar"});
+    const el=this.containerEl,p=this.plugin;el.empty();el.createEl("h2",{text:"تنظیمات Puyan"});
     new Setting(el).setName("فیلد تاریخ شروع").addText(t=>t.setValue(p.settings.startField).onChange(async v=>{p.settings.startField=v.trim()||DEFAULT_SETTINGS.startField;await p.saveSettings();}));
     new Setting(el).setName("فیلد تاریخ پایان").addText(t=>t.setValue(p.settings.endField).onChange(async v=>{p.settings.endField=v.trim()||DEFAULT_SETTINGS.endField;await p.saveSettings();}));
     new Setting(el).setName("فیلد درصد پیشرفت").addText(t=>t.setValue(p.settings.progressField).onChange(async v=>{p.settings.progressField=v.trim()||DEFAULT_SETTINGS.progressField;await p.saveSettings();}));
@@ -53,10 +53,10 @@ class MatebarSettings extends PluginSettingTab {
     new Setting(el).setName("شمارش زیرتسک‌ها").addToggle(t=>t.setValue(p.settings.countSubtasks).onChange(async v=>{p.settings.countSubtasks=v;await p.saveSettings();}));
   }
 }
-module.exports = class MatebarPlugin extends Plugin {
+module.exports = class PuyanPlugin extends Plugin {
   async onload(){
     this.settings=Object.assign({},DEFAULT_SETTINGS,await this.loadData());this.views=new Map();this.updating=new Set();
-    this.registerMarkdownCodeBlockProcessor("matebar",async(source,el,ctx)=>{
+    this.registerMarkdownCodeBlockProcessor("puyan",async(source,el,ctx)=>{
       const path=ctx.sourcePath,view={el,path,refresh:null};view.refresh=()=>this.renderWidget(view);
       if(!this.views.has(path))this.views.set(path,new Set());this.views.get(path).add(view);
       const child=new MarkdownRenderChild(el);child.onunload=()=>{const set=this.views.get(path);if(set){set.delete(view);if(!set.size)this.views.delete(path);}};ctx.addChild(child);
@@ -67,7 +67,7 @@ module.exports = class MatebarPlugin extends Plugin {
       const set=this.views.get(file.path);if(set)for(const view of set)view.refresh();
     }));
     this.addCommand({id:"insert-progress-widget",name:"درج ویجت پیشرفت",editorCallback:editor=>{
-      const tick=String.fromCharCode(96).repeat(3);editor.replaceRange(tick+"matebar\n\n"+tick+"\n",editor.getCursor());
+      const tick=String.fromCharCode(96).repeat(3);editor.replaceRange(tick+"puyan\n\n"+tick+"\n",editor.getCursor());
     }});
     this.addCommand({id:"create-checklist",name:"ساخت چک‌لیست مرحله‌ای",editorCallback:editor=>{
       new ChecklistModal(this.app,(title,total,interval)=>{
@@ -76,7 +76,7 @@ module.exports = class MatebarPlugin extends Plugin {
         editor.replaceRange(output,editor.getCursor());
       }).open();
     }});
-    this.addSettingTab(new MatebarSettings(this.app,this));
+    this.addSettingTab(new PuyanSettings(this.app,this));
   }
   onunload(){this.views.clear();}
   async saveSettings(){await this.saveData(this.settings);}
@@ -96,25 +96,25 @@ module.exports = class MatebarPlugin extends Plugin {
           if(started&&!front[sk])front[sk]=today;if(completed&&!front[ek])front[ek]=today;
           if(!completed)delete front[ek];if(!started){delete front[sk];delete front[ek];}
           if(this.settings.saveProgress)front[pk]=percent;
-        });}catch(e){console.error("Matebar frontmatter update failed",e);}
+        });}catch(e){console.error("Puyan frontmatter update failed",e);}
         finally{window.setTimeout(()=>this.updating.delete(file.path),150);}
       }
     }
     const latest=(this.app.metadataCache.getFileCache(file)||{}).frontmatter||fm;
-    view.el.empty();view.el.addClass("matebar");
-    if(!total){view.el.createDiv({cls:"matebar-empty",text:"برای نمایش پیشرفت، ابتدا در این یادداشت چند تسک بسازید."});return;}
-    const header=view.el.createDiv("matebar-header");
-    header.createDiv({cls:"matebar-title",text:"پیشرفت فعالیت"});
-    header.createDiv({cls:"matebar-percent",text:percent.toLocaleString("fa-IR")+"٪"});
-    const track=view.el.createDiv("matebar-track");track.createDiv("matebar-fill").style.width=percent+"%";
-    const stats=view.el.createDiv("matebar-stats");
+    view.el.empty();view.el.addClass("puyan");
+    if(!total){view.el.createDiv({cls:"puyan-empty",text:"برای نمایش پیشرفت، ابتدا در این یادداشت چند تسک بسازید."});return;}
+    const header=view.el.createDiv("puyan-header");
+    header.createDiv({cls:"puyan-title",text:"پیشرفت فعالیت"});
+    header.createDiv({cls:"puyan-percent",text:percent.toLocaleString("fa-IR")+"٪"});
+    const track=view.el.createDiv("puyan-track");track.createDiv("puyan-fill").style.width=percent+"%";
+    const stats=view.el.createDiv("puyan-stats");
     stats.createSpan({text:done.toLocaleString("fa-IR")+" از "+total.toLocaleString("fa-IR")+" تسک انجام‌شده"});
     stats.createSpan({text:(total-done).toLocaleString("fa-IR")+" باقی‌مانده"});
-    const dates=view.el.createDiv("matebar-dates");
+    const dates=view.el.createDiv("puyan-dates");
     const shownStart=done>0?(latest[sk]||today):null,shownEnd=done===total?(latest[ek]||today):null;
     if(shownStart)dates.createSpan({text:"شروع: "+shownStart});if(shownEnd)dates.createSpan({text:"پایان: "+shownEnd});
     if(shownStart&&shownEnd){const days=this.durationInDays(shownStart,shownEnd);if(days!==null)dates.createSpan({text:"مدت: "+days.toLocaleString("fa-IR")+" روز"});}
-    if(percent===100)view.el.createDiv({cls:"matebar-complete",text:"این فعالیت تکمیل شده است."});
+    if(percent===100)view.el.createDiv({cls:"puyan-complete",text:"این فعالیت تکمیل شده است."});
   }
   durationInDays(start,end){
     const a=this.parseDate(start),b=this.parseDate(end);

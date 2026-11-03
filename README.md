@@ -1,8 +1,8 @@
-# Matebar
+# Puyan
 
 **هر هدف، یک مسیر؛ هر گام، یک پیشرفت.**
 
-Matebar is a flexible progress tracker for Obsidian. Track projects, tasks, reading goals, learning plans, and personal activities with an inline progress widget, automatic date tracking, and a reusable checklist generator.
+Puyan is a flexible progress tracker for Obsidian. Track projects, tasks, reading goals, learning plans, and personal activities with an inline progress widget, automatic date tracking, and a reusable checklist generator.
 
 ## Features
 
@@ -20,11 +20,11 @@ Matebar is a flexible progress tracker for Obsidian. Track projects, tasks, read
 
 ## Quick start
 
-1. Install and enable Matebar.
+1. Install and enable Puyan.
 2. Add tasks to a note using standard Markdown task syntax.
 3. Insert this code block where you want the progress widget to appear:
 
-   ~~~matebar
+   ~~~puyan
    ~~~
 
 4. Switch to Reading view to see the widget.
@@ -35,12 +35,12 @@ The widget reads tasks from the note containing the code block. It does not add 
 
 Open the Command Palette and search for:
 
-- درج ویجت پیشرفت — inserts a Matebar code block at the cursor.
+- درج ویجت پیشرفت — inserts a Puyan code block at the cursor.
 - ساخت چک‌لیست مرحله‌ای — creates a checklist by asking for an activity title, total amount, and step interval. It works for page counts, chapters, milestones, or any other numeric goal.
 
 ## Automatic tracking
 
-By default, Matebar uses these Frontmatter properties:
+By default, Puyan uses these Frontmatter properties:
 
 | Property | Purpose |
 | --- | --- |
@@ -48,7 +48,7 @@ By default, Matebar uses these Frontmatter properties:
 | پایان | Date all tasks are completed |
 | پیشرفت | Calculated percentage |
 
-You can rename these properties or disable percentage storage in Settings → Matebar.
+You can rename these properties or disable percentage storage in Settings → Puyan.
 
 If all tasks are unchecked, the start and completion dates are cleared. If a task is added after completion, the completion date is removed until all tasks are complete again.
 
@@ -71,14 +71,14 @@ Jalali formatting uses the calendar support built into the JavaScript internatio
 
 ### Community plugins
 
-Once approved and listed in the Obsidian community plugin directory, search for Matebar in Settings → Community plugins.
+Once approved and listed in the Obsidian community plugin directory, search for Puyan in Settings → Community plugins.
 
 ### Manual installation
 
 1. Download main.js, manifest.json, and styles.css from the latest GitHub release.
-2. Create .obsidian/plugins/matebar/ in your vault.
+2. Create .obsidian/plugins/puyan/ in your vault.
 3. Place the three files in that folder.
-4. Reload Obsidian and enable Matebar.
+4. Reload Obsidian and enable Puyan.
 
 ## Development
 

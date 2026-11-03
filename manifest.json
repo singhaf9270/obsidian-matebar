@@ -1,0 +1,10 @@
+{
+  "id": "matebar",
+  "name": "Matebar",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "A flexible progress tracker for projects, tasks, reading goals, and personal activities.",
+  "author": "Saeed Ghabadi",
+  "authorUrl": "https://github.com/singhaf9270",
+  "isDesktopOnly": false
+}

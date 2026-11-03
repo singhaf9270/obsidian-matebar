@@ -102,19 +102,61 @@ module.exports = class PuyanPlugin extends Plugin {
     }
     const latest=(this.app.metadataCache.getFileCache(file)||{}).frontmatter||fm;
     view.el.empty();view.el.addClass("puyan");
-    if(!total){view.el.createDiv({cls:"puyan-empty",text:"برای نمایش پیشرفت، ابتدا در این یادداشت چند تسک بسازید."});return;}
+    if(!total){view.el.createDiv({cls:"puyan-empty",text:"⚠️ هیچ تسکی برای نمایش پیشرفت وجود ندارد"});return;}
+
+    let gradient,icon,status,glowColor;
+    if(percent===100){
+      gradient="linear-gradient(135deg,#10b981,#34d399,#6ee7b7)";
+      icon="🎉";status="کامل شد!";glowColor="rgba(16,185,129,.4)";
+    }else if(percent>=75){
+      gradient="linear-gradient(135deg,#8b5cf6,#a78bfa,#c4b5fd)";
+      icon="🔥";status="نزدیک به اتمام";glowColor="rgba(139,92,246,.4)";
+    }else if(percent>=50){
+      gradient="linear-gradient(135deg,#3b82f6,#60a5fa,#93c5fd)";
+      icon="🌓";status="نیمه راه";glowColor="rgba(59,130,246,.4)";
+    }else if(percent>=25){
+      gradient="linear-gradient(135deg,#f59e0b,#fbbf24,#fcd34d)";
+      icon="⚡";status="در حال انجام";glowColor="rgba(245,158,11,.4)";
+    }else{
+      gradient="linear-gradient(135deg,#ef4444,#f87171,#fca5a5)";
+      icon="🚀";status="شروع";glowColor="rgba(239,68,68,.4)";
+    }
+
     const header=view.el.createDiv("puyan-header");
-    header.createDiv({cls:"puyan-title",text:"پیشرفت فعالیت"});
-    header.createDiv({cls:"puyan-percent",text:percent.toLocaleString("fa-IR")+"٪"});
-    const track=view.el.createDiv("puyan-track");track.createDiv("puyan-fill").style.width=percent+"%";
+    const heading=header.createDiv("puyan-heading");
+    heading.createSpan({cls:"puyan-icon",text:icon});
+    heading.createSpan({cls:"puyan-title",text:status});
+    header.createSpan({cls:"puyan-counter",text:done.toLocaleString("fa")+" / "+total.toLocaleString("fa")+" تسک"});
+
+    const track=view.el.createDiv("puyan-track");
+    if(percent>0){
+      const glow=track.createDiv("puyan-glow");
+      glow.style.width=percent+"%";
+      glow.style.background=glowColor;
+    }
+    const fill=track.createDiv("puyan-fill");
+    fill.style.width=percent+"%";
+    fill.style.background=gradient;
+    if(percent>=20)fill.setText(percent.toLocaleString("fa")+"٪");
+    else track.createSpan({cls:"puyan-outside-percent",text:percent.toLocaleString("fa")+"٪"});
+
     const stats=view.el.createDiv("puyan-stats");
-    stats.createSpan({text:done.toLocaleString("fa-IR")+" از "+total.toLocaleString("fa-IR")+" تسک انجام‌شده"});
-    stats.createSpan({text:(total-done).toLocaleString("fa-IR")+" باقی‌مانده"});
-    const dates=view.el.createDiv("puyan-dates");
-    const shownStart=done>0?(latest[sk]||today):null,shownEnd=done===total?(latest[ek]||today):null;
-    if(shownStart)dates.createSpan({text:"شروع: "+shownStart});if(shownEnd)dates.createSpan({text:"پایان: "+shownEnd});
-    if(shownStart&&shownEnd){const days=this.durationInDays(shownStart,shownEnd);if(days!==null)dates.createSpan({text:"مدت: "+days.toLocaleString("fa-IR")+" روز"});}
-    if(percent===100)view.el.createDiv({cls:"puyan-complete",text:"این فعالیت تکمیل شده است."});
+    stats.createSpan({text:done.toLocaleString("fa")+" از "+total.toLocaleString("fa")+" تسک انجام‌شده"});
+    stats.createSpan({text:(total-done).toLocaleString("fa")+" باقی‌مانده"});
+
+    const shownStart=done>0?(latest[sk]||today):null;
+    const shownEnd=done===total?(latest[ek]||today):null;
+    const days=shownStart&&shownEnd?this.durationInDays(shownStart,shownEnd):null;
+    if(percent===100&&shownEnd){
+      const completion=view.el.createDiv("puyan-completion");
+      completion.createSpan({cls:"puyan-crown",text:"🏆"});
+      completion.createSpan({cls:"puyan-completion-text",text:"✅ تکمیل شده در: "+shownEnd});
+      if(days!==null)completion.createSpan({cls:"puyan-duration-pill",text:"مدت انجام: "+days.toLocaleString("fa")+" روز"});
+    }else if(shownStart){
+      const info=view.el.createDiv("puyan-duration-info");
+      info.createSpan({text:"⏳"});
+      info.createSpan({text:"شروع: "+shownStart});
+    }
   }
   durationInDays(start,end){
     const a=this.parseDate(start),b=this.parseDate(end);

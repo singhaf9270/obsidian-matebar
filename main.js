@@ -111,8 +111,9 @@ module.exports = class MatebarPlugin extends Plugin {
     stats.createSpan({text:done.toLocaleString("fa-IR")+" از "+total.toLocaleString("fa-IR")+" تسک انجام‌شده"});
     stats.createSpan({text:(total-done).toLocaleString("fa-IR")+" باقی‌مانده"});
     const dates=view.el.createDiv("matebar-dates");
-    if(latest[sk])dates.createSpan({text:"شروع: "+latest[sk]});if(latest[ek])dates.createSpan({text:"پایان: "+latest[ek]});
-    if(latest[sk]&&latest[ek]){const days=this.durationInDays(latest[sk],latest[ek]);if(days!==null)dates.createSpan({text:"مدت: "+days.toLocaleString("fa-IR")+" روز"});}
+    const shownStart=done>0?(latest[sk]||today):null,shownEnd=done===total?(latest[ek]||today):null;
+    if(shownStart)dates.createSpan({text:"شروع: "+shownStart});if(shownEnd)dates.createSpan({text:"پایان: "+shownEnd});
+    if(shownStart&&shownEnd){const days=this.durationInDays(shownStart,shownEnd);if(days!==null)dates.createSpan({text:"مدت: "+days.toLocaleString("fa-IR")+" روز"});}
     if(percent===100)view.el.createDiv({cls:"matebar-complete",text:"این فعالیت تکمیل شده است."});
   }
   durationInDays(start,end){

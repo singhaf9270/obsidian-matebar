@@ -1,4 +1,4 @@
-const { Plugin, PluginSettingTab, Setting, Modal, Notice } = require("obsidian");
+const { Plugin, PluginSettingTab, Setting, Modal, Notice, MarkdownRenderChild } = require("obsidian");
 const DEFAULT_SETTINGS = { startField: "شروع", endField: "پایان", progressField: "پیشرفت", calendar: "jalali", dateFormat: "numeric", saveProgress: true, countSubtasks: true };
 function digits(v) { return String(v).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)); }
 function dateText(date, calendar, format) {
@@ -59,7 +59,7 @@ module.exports = class MatebarPlugin extends Plugin {
     this.registerMarkdownCodeBlockProcessor("matebar",async(source,el,ctx)=>{
       const path=ctx.sourcePath,view={el,path,refresh:null};view.refresh=()=>this.renderWidget(view);
       if(!this.views.has(path))this.views.set(path,new Set());this.views.get(path).add(view);
-      ctx.addChild({onunload:()=>{const set=this.views.get(path);if(set){set.delete(view);if(!set.size)this.views.delete(path);}}});
+      const child=new MarkdownRenderChild(el);child.onunload=()=>{const set=this.views.get(path);if(set){set.delete(view);if(!set.size)this.views.delete(path);}};ctx.addChild(child);
       await this.renderWidget(view);
     });
     this.registerEvent(this.app.vault.on("modify",file=>{
@@ -112,6 +112,26 @@ module.exports = class MatebarPlugin extends Plugin {
     stats.createSpan({text:(total-done).toLocaleString("fa-IR")+" باقی‌مانده"});
     const dates=view.el.createDiv("matebar-dates");
     if(latest[sk])dates.createSpan({text:"شروع: "+latest[sk]});if(latest[ek])dates.createSpan({text:"پایان: "+latest[ek]});
+    if(latest[sk]&&latest[ek]){const days=this.durationInDays(latest[sk],latest[ek]);if(days!==null)dates.createSpan({text:"مدت: "+days.toLocaleString("fa-IR")+" روز"});}
     if(percent===100)view.el.createDiv({cls:"matebar-complete",text:"این فعالیت تکمیل شده است."});
+  }
+  durationInDays(start,end){
+    const a=this.parseDate(start),b=this.parseDate(end);
+    if(!a||!b)return null;
+    return Math.max(1,Math.round((b-a)/86400000)+1);
+  }
+  parseDate(value){
+    const m=digits(value).match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})$/);
+    if(!m)return null;
+    const y=Number(m[1]),month=Number(m[2]),day=Number(m[3]);
+    if(this.settings.calendar==="gregorian")return new Date(y,month-1,day);
+    const approx=new Date(y+621,month-1,day);
+    for(let offset=-4;offset<=4;offset++){
+      const candidate=new Date(approx.getTime()+offset*86400000);
+      const parts=new Intl.DateTimeFormat("en-US-u-ca-persian",{year:"numeric",month:"numeric",day:"numeric"}).formatToParts(candidate);
+      const get=t=>Number(parts.find(x=>x.type===t)?.value||0);
+      if(get("year")===y&&get("month")===month&&get("day")===day)return candidate;
+    }
+    return null;
   }
 };

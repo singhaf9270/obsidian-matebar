@@ -373,6 +373,6 @@ module.exports = class PuyanPlugin extends Plugin {
   durationInDays(start, end) {
     const a = parseDateValue(start, this.settings.calendar), b = parseDateValue(end, this.settings.calendar);
     if (!a || !b) return null;
-    return Math.max(1, Math.ceil((b.getTime() - a.getTime()) / 86400000) + 1);
+    return Math.max(0, Math.ceil((b.getTime() - a.getTime()) / 86400000));
   }
 };

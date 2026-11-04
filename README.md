@@ -95,9 +95,17 @@ Examples:
 
 The activity title is optional. If it is left empty, the generator does not require a title.
 
+### Saved checklist templates
+
+Create multiple reusable templates from **Settings → Puyan** using the plus icon. Each template can be fixed (items separated by commas) or step-based (total, interval, and a custom line template). Use the edit and delete icons to manage saved templates. Run **Create checklist from template** from the Command Palette to choose which saved template to insert.
+
+Fixed-list items are entered as comma-separated values. For example: `شنبه، یکشنبه، دوشنبه، سه‌شنبه، چهارشنبه، پنجشنبه، جمعه`.
+
+You can optionally enable dates in the command window and choose a starting date. Puyan adds consecutive dates to the generated items, using the selected calendar and date format.
+
 ### Fixed list
 
-Select the fixed-list type and enter one item per line in settings. For example:
+Select a saved fixed-list template in the command window. For example:
 
 ~~~text
 شنبه

@@ -14,7 +14,10 @@ const DEFAULT_SETTINGS = {
   showCounter: true,
   showStartDate: true,
   showEndDate: true,
-  showDuration: true
+  showDuration: true,
+  checklistType: "numeric",
+  checklistTemplate: "- [ ] {n}",
+  checklistItems: "شنبه\nیکشنبه\nدوشنبه\nسه‌شنبه\nچهارشنبه\nپنجشنبه\nجمعه"
 };
 
 const TEXT = {
@@ -35,7 +38,12 @@ const TEXT = {
     completedOn: "تکمیل شده در:", duration: "مدت انجام:", days: "روز", lessThanDay: "کمتر از یک روز",
     startedOn: "شروع:", migrationDone: "تاریخ‌های یادداشت‌ها به قالب جدید تبدیل شد.",
     migrationPartial: "تبدیل تاریخ‌ها انجام شد؛ بعضی تاریخ‌های ناشناخته بدون تغییر ماندند.",
-    migrationNone: "تنظیمات تاریخ تغییر کرد؛ تاریخ قابل تبدیل دیگری پیدا نشد."
+    migrationNone: "تنظیمات تاریخ تغییر کرد؛ تاریخ قابل تبدیل دیگری پیدا نشد.",
+    widgetTarget: "یادداشت منبع", checklistType: "نوع چک‌لیست پیش‌فرض", numericList: "عددگذاری مرحله‌ای", listItems: "فهرست ثابت",
+    checklistTemplate: "قالب هر مرحله", templateDesc: "متغیرهای قابل استفاده: {n} شماره مرحله، {total} مقدار کل، {title} عنوان",
+    checklistItems: "موارد فهرست (هر مورد در یک خط)", listDesc: "برای نمونه روزهای هفته را هرکدام در یک خط بنویسید.",
+    widgetSyntax: "برای نمایش ویجت از یادداشت دیگر، در کدبلاک بنویسید: note: مسیر/یادداشت.md",
+    targetNotFound: "یادداشت مقصد پیدا نشد: ", listEmpty: "فهرست تنظیم‌شده خالی است."
   },
   en: {
     settings: "Puyan settings", language: "Interface language", fa: "فارسی", en: "English",
@@ -54,7 +62,12 @@ const TEXT = {
     completedOn: "Completed on:", duration: "Duration:", days: "days", lessThanDay: "Less than a day",
     startedOn: "Started:", migrationDone: "Dates in your notes were converted to the new format.",
     migrationPartial: "Date conversion finished; some unrecognized dates were left unchanged.",
-    migrationNone: "Date settings changed; no convertible dates were found."
+    migrationNone: "Date settings changed; no convertible dates were found.",
+    widgetTarget: "Source note", checklistType: "Default checklist type", numericList: "Numbered steps", listItems: "Fixed list",
+    checklistTemplate: "Step line template", templateDesc: "Available tokens: {n} step number, {total} total, {title} activity title",
+    checklistItems: "List items (one per line)", listDesc: "For example, enter weekdays on separate lines.",
+    widgetSyntax: "To show a widget from another note, add this inside the code block: note: path/to/note.md",
+    targetNotFound: "Target note not found: ", listEmpty: "The configured list is empty."
   }
 };
 
@@ -150,21 +163,29 @@ function readTasks(content, countSubtasks) {
 }
 
 class ChecklistModal extends Modal {
-  constructor(app, submit, language) { super(app); this.submit = submit; this.t = TEXT[language]; }
+  constructor(app, plugin, submit, language) { super(app); this.plugin = plugin; this.submit = submit; this.language = language; this.t = TEXT[language]; }
   onOpen() {
     const el = this.contentEl, t = this.t;
     el.addClass("puyan-modal");
+    el.setAttribute("dir", this.language === "fa" ? "rtl" : "ltr");
     el.createEl("h2", { text: t.modalTitle });
     let title = "", total = "100", step = "10";
-    new Setting(el).setName(t.activity).addText(input => input.setPlaceholder(t.activity).onChange(v => title = v));
+    new Setting(el).setName(t.activity).addText(input => input.setPlaceholder(t.activity + " (اختیاری)").onChange(v => title = v));
     new Setting(el).setName(t.total).setDesc(t.totalDesc).addText(input => input.setValue(total).onChange(v => total = v));
     new Setting(el).setName(t.interval).addText(input => input.setValue(step).onChange(v => step = v));
     new Setting(el).addButton(button => button.setButtonText(t.create).setCta().onClick(() => {
-      const n = Number(normalizeDigits(total)), interval = Number(normalizeDigits(step));
-      if (!title.trim() || !Number.isInteger(n) || !Number.isInteger(interval) || n < 1 || interval < 1) {
-        new Notice(t.invalid); return;
+      if (this.plugin.settings.checklistType === "list") {
+        const items = this.plugin.settings.checklistItems.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+        if (!items.length) { new Notice(t.listEmpty); return; }
+        this.submit({ mode: "list", title: title.trim(), items });
+      } else {
+        const n = Number(normalizeDigits(total)), interval = Number(normalizeDigits(step));
+        if (!Number.isInteger(n) || !Number.isInteger(interval) || n < 1 || interval < 1) {
+          new Notice(t.invalid); return;
+        }
+        this.submit({ mode: "numeric", title: title.trim(), total: n, interval });
       }
-      this.submit(title.trim(), n, interval); this.close();
+      this.close();
     }));
   }
   onClose() { this.contentEl.empty(); }
@@ -175,6 +196,7 @@ class PuyanSettings extends PluginSettingTab {
   display() {
     const el = this.containerEl, p = this.plugin, s = p.settings, t = TEXT[s.language];
     el.empty();
+    el.setAttribute("dir", s.language === "fa" ? "rtl" : "ltr");
     el.createEl("h2", { text: t.settings });
     new Setting(el).setName(t.language).addDropdown(d => d.addOption("fa", t.fa).addOption("en", t.en).setValue(s.language).onChange(async v => { s.language = v; await p.saveSettings(); this.display(); }));
     el.createEl("h3", { text: s.language === "fa" ? "فیلدهای یادداشت (Frontmatter)" : "Frontmatter properties" });
@@ -193,6 +215,10 @@ class PuyanSettings extends PluginSettingTab {
     p.toggleSetting(el, t.showStartDate, "showStartDate");
     p.toggleSetting(el, t.showEndDate, "showEndDate");
     p.toggleSetting(el, t.showDuration, "showDuration");
+    el.createEl("h3", { text: s.language === "fa" ? "ساخت چک‌لیست" : "Checklist generator" });
+    new Setting(el).setName(t.checklistType).addDropdown(d => d.addOption("numeric", t.numericList).addOption("list", t.listItems).setValue(s.checklistType).onChange(async v => { s.checklistType = v; await p.saveSettings(); }));
+    new Setting(el).setName(t.checklistTemplate).setDesc(t.templateDesc).addText(input => input.setValue(s.checklistTemplate).onChange(async v => { s.checklistTemplate = v || "- [ ] {n}"; await p.saveSettings(); }));
+    new Setting(el).setName(t.checklistItems).setDesc(t.listDesc).addTextArea(input => { input.setValue(s.checklistItems); input.inputEl.rows = 7; input.onChange(async v => { s.checklistItems = v; await p.saveSettings(); }); });
   }
 }
 
@@ -202,7 +228,19 @@ module.exports = class PuyanPlugin extends Plugin {
     this.views = new Map();
     this.updating = new Set();
     this.registerMarkdownCodeBlockProcessor("puyan", async (source, el, ctx) => {
-      const path = ctx.sourcePath, view = { el, path, refresh: null };
+      const options = this.parseWidgetOptions(source);
+      let target = ctx.sourcePath;
+      if (options.note) {
+        const link = options.note.replace(/^\[\[|\]\]$/g, "");
+        const destination = this.app.metadataCache.getFirstLinkpathDest(link, ctx.sourcePath);
+        if (destination) target = destination.path;
+        else {
+          el.addClass("puyan");
+          el.createDiv({ cls: "puyan-empty", text: TEXT[this.settings.language].targetNotFound + options.note });
+          return;
+        }
+      }
+      const path = target, view = { el, path, sourcePath: ctx.sourcePath, refresh: null };
       view.refresh = () => this.renderWidget(view);
       if (!this.views.has(path)) this.views.set(path, new Set());
       this.views.get(path).add(view);
@@ -225,12 +263,18 @@ module.exports = class PuyanPlugin extends Plugin {
       editor.replaceRange(fence + "puyan\n\n" + fence + "\n", editor.getCursor());
     }});
     this.addCommand({ id: "create-checklist", name: t.commandChecklist, editorCallback: editor => {
-      new ChecklistModal(this.app, (title, total, interval) => {
-        const steps = [];
-        for (let n = interval; n < total; n += interval) steps.push(n);
-        steps.push(total);
-        const output = "## " + title + "\n\n" + steps.map(n => "- [ ] " + title + " — " + n + " از " + total).join("\n") + "\n";
-        editor.replaceRange(output, editor.getCursor());
+      new ChecklistModal(this.app, this, result => {
+        let lines = [];
+        if (result.mode === "list") lines = result.items.map(item => "- [ ] " + item);
+        else {
+          const steps = [];
+          for (let n = result.interval; n < result.total; n += result.interval) steps.push(n);
+          steps.push(result.total);
+          const template = this.settings.checklistTemplate || "- [ ] {n}";
+          lines = steps.map(n => template.replace(/\{n\}/g, String(n)).replace(/\{total\}/g, String(result.total)).replace(/\{title\}/g, result.title));
+        }
+        const heading = result.title ? "## " + result.title + "\n\n" : "";
+        editor.replaceRange(heading + lines.join("\n") + "\n", editor.getCursor());
       }, this.settings.language).open();
     }});
     this.addSettingTab(new PuyanSettings(this.app, this));
@@ -238,6 +282,14 @@ module.exports = class PuyanPlugin extends Plugin {
 
   onunload() { this.views.clear(); }
   async saveSettings() { await this.saveData(this.settings); }
+  parseWidgetOptions(source) {
+    const options = {};
+    for (const line of String(source || "").split(/\r?\n/)) {
+      const match = line.match(/^\s*note\s*:\s*(.+?)\s*$/i);
+      if (match) options.note = match[1].trim();
+    }
+    return options;
+  }
   textSetting(container, label, key, fallback) {
     new Setting(container).setName(label).addText(input => input.setValue(this.settings[key]).onChange(async value => {
       this.settings[key] = value.trim() || fallback;

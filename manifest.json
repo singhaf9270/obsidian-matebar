@@ -1,9 +1,9 @@
 {
   "id": "puyan",
   "name": "Puyan",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "minAppVersion": "1.5.0",
-  "description": "A bilingual progress tracker for Obsidian with flexible dates, task progress, and duration tracking.",
+  "description": "A bilingual progress tracker for Obsidian with cross-note widgets and configurable checklist generation.",
   "author": "Saeed Ghabadi",
   "authorUrl": "https://github.com/singhaf9270",
   "isDesktopOnly": false

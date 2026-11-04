@@ -163,3 +163,9 @@ Then enable **Puyan** from Obsidian's Community Plugins settings.
 ## License
 
 MIT
+
+## Support
+
+If you find Puyan useful and would like to support its development, you can make a donation:
+
+[Support Puyan on Reymit](https://reymit.ir/singhaf9270)

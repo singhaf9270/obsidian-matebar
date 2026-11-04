@@ -47,3 +47,16 @@
 [dir="rtl"] .setting-item-description{text-align:right}
 [dir="ltr"] .setting-item-control{direction:ltr}
 [dir="rtl"] .setting-item-control{direction:rtl}
+
+/* Widget direction follows the selected interface language. */
+.puyan[dir="rtl"]{direction:rtl;text-align:right}
+.puyan[dir="ltr"]{direction:ltr;text-align:left}
+.puyan[dir="ltr"] .puyan-completion,.puyan[dir="ltr"] .puyan-duration-info{direction:ltr}
+.puyan[dir="rtl"] .puyan-completion,.puyan[dir="rtl"] .puyan-duration-info{direction:rtl}
+.puyan[dir="ltr"] .puyan-fill{justify-content:flex-start;padding-left:12px;padding-right:0}
+.puyan[dir="rtl"] .puyan-fill{justify-content:flex-end;padding-right:12px;padding-left:0}
+.puyan[dir="ltr"] .puyan-outside-percent{right:auto;left:8px}
+.puyan-template-help{position:relative;display:inline-block;margin-inline-start:8px}
+.puyan-template-help summary{cursor:pointer;list-style:none;width:22px;height:22px;border:1px solid var(--background-modifier-border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;font-weight:700}
+.puyan-template-help summary::-webkit-details-marker{display:none}
+.puyan-template-help-body{position:absolute;z-index:20;top:28px;inset-inline-end:0;width:min(320px,75vw);white-space:pre-line;padding:12px;border:1px solid var(--background-modifier-border);border-radius:10px;background:var(--background-primary);box-shadow:0 6px 24px rgba(0,0,0,.16);font-size:var(--font-smaller);line-height:1.7}

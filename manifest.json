@@ -3,8 +3,9 @@
   "name": "Puyan",
   "version": "1.0.1",
   "minAppVersion": "1.5.0",
-  "description": "A bilingual progress tracker for Obsidian with cross-note widgets and configurable checklist generation.",
+  "description": "A bilingual progress tracker with cross-note widgets and configurable checklist generation.",
   "author": "Saeed Ghabadi",
   "authorUrl": "https://github.com/singhaf9270",
-  "isDesktopOnly": false
+  "isDesktopOnly": false,
+  "fundingUrl": "https://reymit.ir/singhaf9270"
 }

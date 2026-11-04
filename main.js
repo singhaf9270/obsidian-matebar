@@ -271,7 +271,7 @@ module.exports = class PuyanPlugin extends Plugin {
           for (let n = result.interval; n < result.total; n += result.interval) steps.push(n);
           steps.push(result.total);
           const template = this.settings.checklistTemplate || "- [ ] {n}";
-          lines = steps.map(n => template.replace(/\{n\}/g, String(n)).replace(/\{total\}/g, String(result.total)).replace(/\{title\}/g, result.title));
+          lines = steps.map(n => template.replace(/\{n\}/g, displayDigits(n, this.settings.outputDigits)).replace(/\{total\}/g, displayDigits(result.total, this.settings.outputDigits)).replace(/\{title\}/g, result.title));
         }
         const heading = result.title ? "## " + result.title + "\n\n" : "";
         editor.replaceRange(heading + lines.join("\n") + "\n", editor.getCursor());

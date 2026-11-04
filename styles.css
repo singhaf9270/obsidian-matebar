@@ -33,3 +33,17 @@
   .puyan-completion{gap:8px;padding:10px 12px}
   .puyan-duration-pill{white-space:normal}
 }
+
+/* Settings and modal direction follow the selected interface language. */
+.puyan-modal[dir="ltr"]{direction:ltr;text-align:left}
+.puyan-modal[dir="rtl"]{direction:rtl;text-align:right}
+[dir="ltr"] .setting-item,
+[dir="ltr"] .setting-item-info,
+[dir="ltr"] .setting-item-name,
+[dir="ltr"] .setting-item-description{text-align:left}
+[dir="rtl"] .setting-item,
+[dir="rtl"] .setting-item-info,
+[dir="rtl"] .setting-item-name,
+[dir="rtl"] .setting-item-description{text-align:right}
+[dir="ltr"] .setting-item-control{direction:ltr}
+[dir="rtl"] .setting-item-control{direction:rtl}

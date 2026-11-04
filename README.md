@@ -2,87 +2,69 @@
 
 **هر هدف، یک مسیر؛ هر گام، یک پیشرفت.**
 
-Puyan is a flexible progress tracker for Obsidian. Track projects, tasks, reading goals, learning plans, and personal activities with an inline progress widget, automatic date tracking, and a reusable checklist generator.
+Puyan is a bilingual (Persian/English) progress tracker for Obsidian. It tracks tasks in the current note, records start and completion dates, calculates the elapsed duration, and displays a polished progress widget.
 
 ## Features
 
-- Add a progress widget only where you need it.
-- Calculate progress from the tasks in the current note.
+- Persian and English interface; switch languages in Settings → Puyan.
+- Accepts both Persian and Latin digits in numeric input and task-related values.
+- Choose whether displayed numbers use Persian or Latin digits.
+- Choose Jalali or Gregorian calendar and numeric, month-name, or ISO date format.
 - Automatically record the start date when the first task is completed.
-- Automatically record the completion date when all tasks are complete.
-- Clear the completion date when a completed activity becomes active again.
-- Optionally save the calculated percentage to Frontmatter.
-- Choose Jalali or Gregorian dates and a date display format.
-- Customize the Frontmatter property names.
-- Choose whether nested tasks are included in progress.
-- Generate a checklist from a title, total amount, and step interval.
-- Persian interface and responsive styling.
+- Automatically record the completion date and duration when all tasks are complete.
+- Reformat existing start and completion dates in Markdown notes when the calendar or date format changes.
+- Customize Frontmatter property names for start date, completion date, duration, and progress.
+- Optionally save progress percentage and count nested tasks.
+- Control which progress details appear in the widget.
+- Generate a reusable numeric step checklist.
+- Responsive widget styling for desktop and mobile.
 
 ## Quick start
 
 1. Install and enable Puyan.
-2. Add tasks to a note using standard Markdown task syntax.
-3. Insert this code block where you want the progress widget to appear:
+2. Add Markdown tasks to a note.
+3. Insert this code block where the widget should appear:
 
    ~~~puyan
    ~~~
 
 4. Switch to Reading view to see the widget.
 
-The widget reads tasks from the note containing the code block. It does not add a sidebar panel or automatically appear in every note.
+The widget reads tasks from the note containing the code block.
 
 ## Commands
 
-Open the Command Palette and search for:
+- Insert progress widget
+- Create step checklist
 
-- درج ویجت پیشرفت — inserts a Puyan code block at the cursor.
-- ساخت چک‌لیست مرحله‌ای — creates a checklist by asking for an activity title, total amount, and step interval. It works for page counts, chapters, milestones, or any other numeric goal.
+## Frontmatter properties
 
-## Automatic tracking
-
-By default, Puyan uses these Frontmatter properties:
+Default properties:
 
 | Property | Purpose |
 | --- | --- |
-| شروع | Date the first task is completed |
-| پایان | Date all tasks are completed |
-| پیشرفت | Calculated percentage |
+| `شروع` | Date the first task is completed |
+| `پایان` | Date all tasks are completed |
+| `مدت انجام` | Elapsed duration in days after completion |
+| `پیشرفت` | Calculated percentage |
 
-You can rename these properties or disable percentage storage in Settings → Puyan.
+All property names can be customized in Settings → Puyan. Duration is stored as a numeric day count so it remains easy to query.
 
-If all tasks are unchecked, the start and completion dates are cleared. If a task is added after completion, the completion date is removed until all tasks are complete again.
+## Dates and digits
 
-## Date settings
-
-Choose Jalali or Gregorian calendar and one of these formats:
-
-- Numeric: 1405/08/13
-- Month name: 13 آبان 1405 (Jalali) or 13 November 2026 (Gregorian)
-- ISO: 1405-08-13
-
-Jalali formatting uses the calendar support built into the JavaScript internationalization API; no additional calendar plugin is required.
+- Both Persian digits (۲۵) and Latin digits (25) are accepted.
+- The displayed digit style can be set independently.
+- When the calendar or date format changes, Puyan attempts to convert existing start and completion dates in note Frontmatter. Dates it cannot recognize are left unchanged.
+- Date formats: numeric, month name, and ISO.
 
 ## Requirements
 
 - Obsidian 1.5.0 or newer
 - No Dataview or Templater dependency
 
-## Installation
+## Manual installation
 
-### Community plugins
-
-Once approved and listed in the Obsidian community plugin directory, search for Puyan in Settings → Community plugins.
-
-### Manual installation
-
-1. Download main.js, manifest.json, and styles.css from the latest GitHub release.
-2. Create .obsidian/plugins/puyan/ in your vault.
-3. Place the three files in that folder.
-4. Reload Obsidian and enable Puyan.
-
-## Development
-
-The plugin is written in JavaScript and uses the Obsidian plugin API. No build step is required for the current release.
+Download `main.js`, `manifest.json`, and `styles.css` from the latest release and place them in `.obsidian/plugins/puyan/`.
 
 ## License
 

@@ -1,3 +1,6 @@
+/* ============================================================
+   Puyan widget
+   ============================================================ */
 .puyan{
   direction:rtl;margin:16px 0;padding:18px 20px 20px;
   background:var(--background-primary);border-radius:20px;
@@ -21,22 +24,19 @@
 .puyan-duration-pill{font-weight:400;color:#047857;font-size:.9em;background:rgba(16,185,129,.15);padding:2px 10px;border-radius:20px;border:1px solid #86efac;white-space:nowrap}
 .puyan-duration-info{margin-top:12px;padding:8px 14px;background:var(--background-secondary);border-radius:12px;border:1px solid var(--background-modifier-border);display:flex;align-items:center;gap:8px;direction:rtl;font-size:.9em;color:var(--text-muted)}
 .puyan-empty{background:var(--background-secondary);border:1px solid var(--background-modifier-border);border-radius:12px;padding:14px;text-align:center;color:var(--text-muted);font-size:.9em;margin:12px 0}
+.puyan-note-title{font-size:.85em;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.puyan-open-btn{margin-top:12px;padding:6px 14px;border-radius:8px;border:1px solid var(--background-modifier-border);background:var(--background-secondary);color:var(--text-normal);font-size:.85em;cursor:pointer}
+.puyan-open-btn:hover{background:var(--background-modifier-hover);border-color:var(--interactive-accent)}
+
+/* ============================================================
+   Modal
+   ============================================================ */
 .puyan-modal{direction:rtl}
 .puyan-modal .setting-item-control{flex-wrap:wrap}
-@media(max-width:480px){
-  .puyan{padding:14px 12px 16px;border-radius:16px}
-  .puyan-header{gap:7px;flex-wrap:wrap}
-  .puyan-icon{font-size:1.5em}
-  .puyan-title{font-size:1em}
-  .puyan-counter{font-size:.75em;padding:4px 8px}
-  .puyan-stats{justify-content:flex-start}
-  .puyan-completion{gap:8px;padding:10px 12px}
-  .puyan-duration-pill{white-space:normal}
-}
-
-/* Settings and modal direction follow the selected interface language. */
 .puyan-modal[dir="ltr"]{direction:ltr;text-align:left}
 .puyan-modal[dir="rtl"]{direction:rtl;text-align:right}
+
+/* Settings / modal direction */
 [dir="ltr"] .setting-item,
 [dir="ltr"] .setting-item-info,
 [dir="ltr"] .setting-item-name,
@@ -48,7 +48,7 @@
 [dir="ltr"] .setting-item-control{direction:ltr}
 [dir="rtl"] .setting-item-control{direction:rtl}
 
-/* Widget direction follows the selected interface language. */
+/* Widget direction */
 .puyan[dir="rtl"]{direction:rtl;text-align:right}
 .puyan[dir="ltr"]{direction:ltr;text-align:left}
 .puyan[dir="ltr"] .puyan-completion,.puyan[dir="ltr"] .puyan-duration-info{direction:ltr}
@@ -56,10 +56,249 @@
 .puyan[dir="ltr"] .puyan-fill{justify-content:flex-start;padding-left:12px;padding-right:0}
 .puyan[dir="rtl"] .puyan-fill{justify-content:flex-end;padding-right:12px;padding-left:0}
 .puyan[dir="ltr"] .puyan-outside-percent{right:auto;left:8px}
-.puyan-template-help{position:relative;display:inline-block;margin-inline-start:8px}
-.puyan-template-help summary{cursor:pointer;list-style:none;width:22px;height:22px;border:1px solid var(--background-modifier-border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;font-weight:700}
-.puyan-template-help summary::-webkit-details-marker{display:none}
-.puyan-template-help-body{position:absolute;z-index:20;top:28px;inset-inline-end:0;width:min(320px,75vw);white-space:pre-line;padding:12px;border:1px solid var(--background-modifier-border);border-radius:10px;background:var(--background-primary);box-shadow:0 6px 24px rgba(0,0,0,.16);font-size:var(--font-smaller);line-height:1.7}
-
 .puyan[dir="rtl"] .puyan-glow{left:auto;right:0}
 .puyan[dir="ltr"] .puyan-glow{right:auto;left:0}
+
+/* ============================================================
+   Template builder
+   ============================================================ */
+.puyan-tpl-builder{display:flex;flex-direction:column;gap:8px;margin-top:6px;padding:10px 12px;border:1px solid var(--background-modifier-border);border-radius:10px;background:var(--background-secondary)}
+.puyan-tpl-builder .puyan-tpl-input{width:100%;min-height:64px;resize:vertical;padding:8px 10px;font-family:var(--font-monospace);font-size:.9em;line-height:1.6;color:var(--text-normal);background:var(--background-primary);border:1px solid var(--background-modifier-border);border-radius:6px;box-sizing:border-box;direction:ltr;text-align:left;unicode-bidi:plaintext}
+.puyan-tpl-builder .puyan-tpl-input:focus{outline:none;border-color:var(--interactive-accent);box-shadow:0 0 0 2px rgba(var(--interactive-accent-rgb,59,130,246),.25)}
+.puyan-tpl-row{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:.85em}
+.puyan-tpl-row + .puyan-tpl-row{margin-top:-2px}
+.puyan-tpl-label{color:var(--text-muted);font-size:.85em;margin-inline-end:4px;white-space:nowrap}
+.puyan-tpl-btn{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:3px 9px;font-size:.85em;font-family:var(--font-monospace);color:var(--text-normal);background:var(--background-primary);border:1px solid var(--background-modifier-border);border-radius:6px;cursor:pointer;transition:background-color .15s ease,border-color .15s ease,transform .05s ease;white-space:nowrap;direction:ltr}
+.puyan-tpl-btn:hover{background:var(--background-modifier-hover);border-color:var(--interactive-accent)}
+.puyan-tpl-btn:active{transform:translateY(1px)}
+.puyan-tpl-btn:focus-visible{outline:none;border-color:var(--interactive-accent);box-shadow:0 0 0 2px rgba(var(--interactive-accent-rgb,59,130,246),.3)}
+.puyan-tpl-btn.puyan-tpl-preset{font-family:var(--font-interface);padding:4px 12px;background:var(--interactive-accent);color:var(--text-on-accent,#fff);border-color:var(--interactive-accent)}
+.puyan-tpl-btn.puyan-tpl-preset:hover{background:var(--interactive-accent-hover,var(--interactive-accent));filter:brightness(1.05)}
+.puyan-tpl-preview{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding-top:8px;margin-top:2px;border-top:1px dashed var(--background-modifier-border);font-size:.85em;color:var(--text-muted)}
+.puyan-tpl-preview-label{color:var(--text-muted);white-space:nowrap}
+.puyan-tpl-preview code{font-family:var(--font-monospace);font-size:.95em;padding:2px 8px;border-radius:6px;background:var(--background-primary);border:1px solid var(--background-modifier-border);color:var(--text-normal);direction:ltr;unicode-bidi:plaintext;white-space:pre-wrap;word-break:break-word}
+.puyan-modal[dir="rtl"] .puyan-tpl-builder .puyan-tpl-input,
+.puyan-modal[dir="ltr"] .puyan-tpl-builder .puyan-tpl-input{direction:ltr;text-align:left}
+
+/* ============================================================
+   Wizard footer + preset name
+   ============================================================ */
+.puyan-wizard-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;padding-top:12px;border-top:1px solid var(--background-modifier-border)}
+.puyan-wizard-footer button{min-width:90px;padding:6px 16px;border-radius:8px;border:1px solid var(--background-modifier-border);background:var(--background-secondary);color:var(--text-normal);font-size:.9em;cursor:pointer}
+.puyan-wizard-footer button.mod-cta{background:var(--interactive-accent);color:var(--text-on-accent);border-color:var(--interactive-accent)}
+.puyan-wizard-footer button:hover{filter:brightness(1.05)}
+.puyan-preset-name{font-weight:600;color:var(--text-normal)}
+
+/* ============================================================
+   Date input + pick button (SVG icon)
+   ============================================================ */
+.puyan-date-input{width:130px;padding:4px 8px;font-family:var(--font-monospace);border:1px solid var(--background-modifier-border);border-radius:6px;background:var(--background-primary);color:var(--text-normal)}
+.puyan-date-pick{margin-inline-start:6px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--background-modifier-border);background:var(--background-secondary);cursor:pointer;color:var(--text-muted);transition:background .15s ease,color .15s ease,border-color .15s ease;vertical-align:middle}
+.puyan-date-pick:hover{background:var(--background-modifier-hover);color:var(--interactive-accent);border-color:var(--interactive-accent)}
+.puyan-date-pick svg{width:16px;height:16px;stroke-width:1.6}
+
+/* ============================================================
+   Compact stepper (number with − / +)
+   ============================================================ */
+.puyan-stepper{display:inline-flex;align-items:center;gap:2px;padding:2px;border:1px solid var(--background-modifier-border);border-radius:8px;background:var(--background-primary)}
+.puyan-stepper-btn{width:24px;height:24px;border-radius:6px;border:none;background:var(--background-secondary);cursor:pointer;font-size:1em;line-height:1;color:var(--text-normal);display:inline-flex;align-items:center;justify-content:center}
+.puyan-stepper-btn:hover{background:var(--interactive-accent);color:var(--text-on-accent)}
+.puyan-stepper-input{width:42px;text-align:center;padding:3px 4px;border:none;background:transparent;color:var(--text-normal);font-family:var(--font-monospace);font-size:.9em;outline:none}
+
+/* ============================================================
+   Inline popover calendar
+   ============================================================ */
+/* ============================================================
+   Inline popover calendar (fixed-position, escapes modal)
+   ============================================================ */
+.puyan-cal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: transparent;
+}
+.puyan-cal-popover {
+  position: fixed;
+  width: 280px;
+  padding: 14px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.22), 0 2px 8px rgba(0,0,0,.08);
+  z-index: 1001;
+  font-family: var(--font-interface);
+  color: var(--text-normal);
+  animation: puyanCalIn .12s ease;
+}
+@keyframes puyanCalIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.puyan-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 6px;
+}
+.puyan-cal-label {
+  font-weight: 600;
+  font-size: .95em;
+  text-align: center;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.puyan-cal-nav {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.2em;
+  line-height: 1;
+  color: var(--text-muted);
+  transition: background .15s ease, color .15s ease;
+}
+.puyan-cal-nav:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.puyan-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px 0;
+}
+.puyan-cal-wd {
+  text-align: center;
+  font-size: .7em;
+  color: var(--text-faint, var(--text-muted));
+  padding: 4px 0 6px;
+  font-weight: 500;
+}
+.puyan-cal-empty { height: 34px; }
+.puyan-cal-day {
+  height: 34px;
+  width: 34px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: .85em;
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .12s ease, color .12s ease;
+}
+.puyan-cal-day:hover { background: var(--background-modifier-hover); }
+.puyan-cal-day.is-today {
+  border: 1.5px solid var(--interactive-accent);
+  color: var(--interactive-accent);
+  font-weight: 600;
+}
+.puyan-cal-day.is-selected {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  font-weight: 700;
+}
+.puyan-cal-day.is-selected:hover { background: var(--interactive-accent); }
+
+.puyan-cal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+.puyan-cal-today,
+.puyan-cal-close {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  cursor: pointer;
+  font-size: .82em;
+  color: var(--text-normal);
+  transition: background .12s ease, border-color .12s ease;
+}
+.puyan-cal-today:hover,
+.puyan-cal-close:hover {
+  background: var(--background-modifier-hover);
+  border-color: var(--interactive-accent);
+}
+.puyan-cal-today {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  border-color: var(--interactive-accent);
+  font-weight: 600;
+}
+.puyan-cal-today:hover { filter: brightness(1.08); background: var(--interactive-accent); }
+
+/* ============================================================
+   Support section (settings tab footer)
+   ============================================================ */
+.ot-support{margin-block:32px 16px;color:var(--text-normal)}
+.ot-support .ot-contact-heading{margin:0 0 6px;font-size:1.1em;font-weight:650}
+.ot-support .ot-contact-intro{margin:0 0 16px;font-size:.88em;line-height:1.8;color:var(--text-muted)}
+.ot-support .ot-channel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ot-support a.ot-channel{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;padding:16px 8px 12px;border:1px solid var(--background-modifier-border);border-radius:14px;background:var(--background-primary);color:var(--text-normal);text-decoration:none;transition:background .15s ease,border-color .15s ease,transform .05s ease}
+.ot-support a.ot-channel:hover{background:var(--background-modifier-hover);border-color:var(--interactive-accent);transform:translateY(-1px)}
+.ot-support .ot-channel-logo{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:var(--background-secondary);color:var(--text-normal)}
+.ot-support .ot-channel-logo svg{width:24px;height:24px}
+.ot-support .ot-channel-name{font-size:.88em;font-weight:650;text-align:center}
+.ot-support .ot-channel-handle{font-size:10px;color:var(--text-muted);direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.ot-support .ot-channel-join{font-size:.75em;color:var(--text-accent);font-weight:500}
+.ot-support .ot-donation{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:16px;padding:16px 18px;border:1px solid var(--background-modifier-border);border-radius:14px;background:var(--background-secondary)}
+.ot-support .ot-donation-symbol{display:flex;align-items:center;justify-content:center;flex:0 0 40px;height:40px;border:1px solid var(--background-modifier-border);border-radius:50%;background:var(--background-primary);color:var(--text-accent)}
+.ot-support .ot-donation-symbol svg{width:20px;height:20px}
+.ot-support .ot-donation-copy{flex:1 1 180px;min-width:0}
+.ot-support .ot-donation-title{margin:0 0 4px;font-size:.95em;font-weight:650}
+.ot-support .ot-donation-desc{margin:0;font-size:.82em;line-height:1.8;color:var(--text-muted)}
+.ot-support a.ot-donation-button{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 16px;border-radius:8px;background:var(--interactive-accent);color:var(--text-on-accent);font-size:.85em;font-weight:600;text-decoration:none;white-space:nowrap;transition:filter .15s ease}
+.ot-support a.ot-donation-button:hover{filter:brightness(1.08)}
+.ot-support a:focus-visible{outline:2px solid var(--interactive-accent);outline-offset:3px}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media(max-width:480px){
+  .puyan{padding:14px 12px 16px;border-radius:16px}
+  .puyan-header{gap:7px;flex-wrap:wrap}
+  .puyan-icon{font-size:1.5em}
+  .puyan-title{font-size:1em}
+  .puyan-counter{font-size:.75em;padding:4px 8px}
+  .puyan-stats{justify-content:flex-start}
+  .puyan-completion{gap:8px;padding:10px 12px}
+  .puyan-duration-pill{white-space:normal}
+
+  .puyan-tpl-builder{padding:8px}
+  .puyan-tpl-btn{padding:2px 7px;font-size:.8em}
+  .puyan-tpl-label{display:none}
+  .puyan-tpl-preview{flex-direction:column;align-items:flex-start}
+
+  .puyan-cal-popover{width:260px;padding:12px}
+
+  .ot-support .ot-channel-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .ot-support a.ot-channel{padding:12px 4px 10px}
+  .ot-support .ot-channel-logo{width:36px;height:36px}
+  .ot-support .ot-channel-handle{display:none}
+  .ot-support .ot-donation{padding:12px;gap:10px}
+  .ot-support a.ot-donation-button{width:100%;margin-inline-start:0}
+}
+
+/* Date picker icon: keep the calendar glyph crisp and centered across themes. */
+.puyan-date-pick{flex:0 0 32px;padding:0;line-height:0}
+.puyan-date-pick .puyan-calendar-icon{display:block;width:18px;height:18px;min-width:18px;max-width:18px;stroke:currentColor;pointer-events:none}
+.puyan-date-pick:focus-visible{outline:2px solid var(--interactive-accent);outline-offset:2px}

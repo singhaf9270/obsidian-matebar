@@ -164,8 +164,32 @@ Then enable **Puyan** from Obsidian's Community Plugins settings.
 
 MIT
 
+## What's new in 1.0.3
+
+- Updated the checklist template workflow with reusable fixed and step-based templates.
+- Added support for step templates with customizable placeholders, including step number, total, activity title, and date.
+- Improved the date-picker button icon, including clearer sizing, alignment, and accessibility labeling.
+- Refined the settings footer with consistent channel cards and a dedicated donation section.
+- Added direct links to the Bale, Telegram, and YouTube channels in the README.
+
+## Follow Puyan updates
+
+For tutorials, plugin updates, and practical Obsidian tips, follow the channels:
+
+- **Bale:** [ble.ir/obsidiantut](https://ble.ir/obsidiantut)
+- **Telegram:** [t.me/obsidiantut](https://t.me/obsidiantut)
+- **YouTube:** [youtube.com/@obsidiantut](https://youtube.com/@obsidiantut)
+
 ## Support
 
-If you find Puyan useful and would like to support its development, you can make a donation:
+If you find Puyan useful, you can support its continued development:
 
 [Support Puyan on Reymit](https://reymit.ir/singhaf9270)
+
+---
+
+## Changelog
+
+### 1.0.3
+See [What's new in 1.0.3](#whats-new-in-103).
+

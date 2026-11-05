@@ -1,7 +1,7 @@
 {
   "id": "puyan",
   "name": "Puyan",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "minAppVersion": "1.5.0",
   "description": "A bilingual progress tracker with cross-note widgets and configurable checklist generation.",
   "author": "Saeed Ghabadi",
